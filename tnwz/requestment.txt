@@ -1,0 +1,2 @@
+mitmproxy==0.18.2
+pymongo

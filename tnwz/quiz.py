@@ -46,7 +46,7 @@ class TNWZ:
         '''
         HTTPEvent 下面所有事件参数都是 flow 类型 HTTPFlow
         可以在API下面查到 HTTPFlow, 下面有一个属性response 类型 TTPResponse
-        HTTPResponse 有个属性为 content 就是response在内容,更多属性可以查看 文档
+        HTTPResponse 有个属性为 content 就是response内容,更多属性可以查看 文档
         :param flow: 
         :return: 
         '''
@@ -55,7 +55,7 @@ class TNWZ:
             #匹配上后证明抓到的是问题了, 查答案
             data = flow.response.content
             quiz = json.loads(data)
-            #获取问题
+            #获取问题，当前数据是模拟的，有可能和实际处理不一致
             question = quiz['quiz']
             print(question)
 

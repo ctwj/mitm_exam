@@ -47,3 +47,8 @@ Python 3.6.4
 1. tnwz/quiz.py
 	头脑王者抓取问题查询答案脚本
 	![answer.png](http://upload-images.jianshu.io/upload_images/5941869-37a7251ef2168fe5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+
+(**python** *3.x*   +    **mitmproxy** *last*)
+1. syq/syq.py
+   抓取损友圈websorcket数据

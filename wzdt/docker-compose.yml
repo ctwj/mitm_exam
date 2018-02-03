@@ -1,0 +1,27 @@
+mongo_server:
+  image: mongo
+  container_name: wzdt_mongo
+  volumes:
+    - .:/kerwin
+  expose:
+    - "27017"
+  ports:
+    - "27017:27017"
+redis_server:
+  image: redis
+  container_name: wzdt_redis
+  expose:
+   - "6379"
+  ports:
+   - "6379:6379"
+python_server:
+  build: ./docker
+  #image: wzdt_python
+  container_name: wzdt_python
+  volumes:
+    - .:/kerwin
+  ports:
+   - "8080:8080"
+   - "5000:5000"
+
+

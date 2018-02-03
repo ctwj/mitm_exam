@@ -1,0 +1,91 @@
+#WZDT
+
+1. virtualenv
+2. docker
+
+```
+virtualenv venv
+source venv/bin/active
+pip install flask
+python test.py
+```
+
+docker-compose --project-name wzdt build python
+
+```
+docker run -rm -it -p 8080:8080 -v $(pwd)/wzdt:/script mitmproxy/mitmproxy mitmproxy -s /script/wzdt.py
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+POST https://api.ttzhongqian.com/question/free
+{
+    "code": "SUCCESS",
+    "data": {
+        "hasCount": 870,
+        "isChance": 1,
+        "islimit": 0,
+        "surplusCount": 130
+    },
+    "msg": "success"
+}
+ POST https://api.ttzhongqian.com/question/list
+{
+    "code": "SUCCESS",
+    "data": {
+        "answerFalse": 0,
+        "answerRight": 0,
+        "countdown": 10,
+        "integral": 0,
+        "isover": 0,
+        "options": [
+            {
+                "id": "A",
+                "name": "65"
+            },
+            {
+                "id": "B",
+                "name": "66"
+            },
+            {
+                "id": "C",
+                "name": "68"
+            }
+        ],
+        "title": "柯南道尔写了多少部侦探小说",
+        "totalQuestion": 8,
+        "uaId": "1691961"
+    },
+    "msg": "成功"
+}
+POST https://api.ttzhongqian.com/question/answer
+
+loginKey: 19c1b2d8039c3775f0aac47c72009024
+uaId:     1691961
+answer:   B
+
+{
+    "code": "SUCCESS",
+    "data": {
+        "answer": "C",
+        "result": 0
+    },
+    "msg": "完成"
+}
+
+POST https://api.ttzhongqian.com/account/over

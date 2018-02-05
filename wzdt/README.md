@@ -1,20 +1,22 @@
 #WZDT
 
-1. virtualenv
-2. docker
+1. redis
+2. mongo
+3. mitmproxy
+4. flask
+5. websocket
+6. docker
 
+系统启动
 ```
-virtualenv venv
-source venv/bin/active
-pip install flask
-python test.py
+docker-compose up
 ```
+1. 系统启动后,手机连上wifi设置代理为8080
+2. 访问http://mitm.it,并安装证书
+3. 访问http://localhost:5000
 
-docker-compose --project-name wzdt build python
 
-```
-docker run -rm -it -p 8080:8080 -v $(pwd)/wzdt:/script mitmproxy/mitmproxy mitmproxy -s /script/wzdt.py
-```
+
 
 
 

@@ -1,4 +1,4 @@
 echo 'start web'
-python /kerwin/test.py  &
+python /kerwin/webserver.py  &
 echo 'start proxy'
 mitmdump -s /kerwin/wzdt.py

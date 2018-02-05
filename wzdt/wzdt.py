@@ -4,6 +4,8 @@ from mitmproxy import ctx
 from urllib.parse import quote
 import string
 import requests
+from RedisHelper import RedisHelper
+obj = RedisHelper()
 
 def writeIndex():
     pass
@@ -29,7 +31,9 @@ def response(flow):
             options = ask(question, options)
             data['data']['options'] = options
             flow.response.text = json.dumps(data)
+            obj.push(json.dumps(data))
             print('~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
         except Exception as e:
             print(e)
             ctx.log.info(e)

@@ -1,36 +1,53 @@
-#encoding=utf-8
-from flask import Flask,render_template
-from flask_uwsgi_websocket import WebSocket
-from RedisHelper import RedisHelper
+#-*- encoding:utf-8 -*-
+#2014-12-18
+#author: orangleliu
 
-# obj = RedisHelper()
-# redis_sub = obj.subscribe()
+import tornado.web
+import tornado.websocket
+import tornado.httpserver
+import tornado.ioloop
+import tornado-redis
 
-app = Flask(__name__)
-ws = WebSocket(app)
+class IndexPageHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.render('templates/index.html')
+class QuestionListhandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write('{"code": "SUCCESS", "data": {"answerFalse": 0, "answerRight": 0, "countdown": 10, "integral": 0, "isover": 0, "options": [{"id": "A", "name": "65"}, {"id": "B", "name": "66"}, {"id": "C", "name": "68"} ], "title": "柯南道尔写了多少部侦探小说", "totalQuestion": 8, "uaId": "1691961"}, "msg": "成功"}')
 
-@app.route("/")
-def hello_world():
-    return "good"
-    # return render_template("index.html")
+class QuestionAnswerhandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write('{"code": "SUCCESS", "data": {"answer": "C", "result": 0 }, "msg": "完成"}')
 
 
-@app.route("/question/list")
-def question_list():
-    return u'{"code": "SUCCESS", "data": {"answerFalse": 0, "answerRight": 0, "countdown": 10, "integral": 0, "isover": 0, "options": [{"id": "A", "name": "65"}, {"id": "B", "name": "66"}, {"id": "C", "name": "68"} ], "title": "柯南道尔写了多少部侦探小说", "totalQuestion": 8, "uaId": "1691961"}, "msg": "成功"}'
+class WebSocketHandler(tornado.websocket.WebSocketHandler):
+    def check_origin(self, origin):
+        return True
 
-@app.route("/question/answer")
-def question_answer():
-    return u'{"code": "SUCCESS", "data": {"answer": "C", "result": 0 }, "msg": "完成"}'
+    def open(self):
+        pass
 
-@ws.route('/wzdt')
-def wzdt(ws):
-    while True:
-        msg = 'g'
-        # msg = redis_sub.parse_response()
-        # msg = ws.receive()
-        if msg is not None:
-            ws.send(msg)
+    def on_message(self, message):
+        self.write_message(u"Your message was: "+message)
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0",port=5000)
+    def on_close(self):
+        pass
+
+class Application(tornado.web.Application):
+    def __init__(self):
+        handlers = [
+            (r'/', IndexPageHandler),
+            (r'/ws', WebSocketHandler),
+            (r'/question/answer', QuestionAnswerhandler),
+            (r'/question/list', QuestionListhandler),
+        ]
+
+        settings = { "template_path": "."}
+        tornado.web.Application.__init__(self, handlers, **settings)
+
+if __name__ == '__main__':
+    ws_app = Application()
+    server = tornado.httpserver.HTTPServer(ws_app)
+    server.listen(5000)
+    print 'app is runing at 0.0.0.0:5000\nQuit the app with CONTROL-C'
+    tornado.ioloop.IOLoop.instance().start()

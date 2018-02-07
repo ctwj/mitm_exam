@@ -2,4 +2,5 @@ pymongo
 redis
 requests
 mitmproxy
-flask_uwsgi_websocket
+tornado
+tornado-redis

@@ -4,12 +4,57 @@
     <title>答题辅助系统</title>
 
     <style>
-        li { list-style: none; }
+        html,body,h1,h2,h3,h4,h5,h6,div,dl,dt,dd,ul,ol,li,p,blockquote,pre,hr,figure,table,caption,th,td,form,fieldset,legend,input,button,textarea,menu{margin:0;padding:0;}
+        header,footer,section,article,aside,nav,hgroup,address,figure,figcaption,menu,details{display:block;}
+        table{border-collapse:collapse;border-spacing:0;}
+        caption,th{text-align:left;font-weight:normal;}
+        html,body,fieldset,img,iframe,abbr{border:0;}
+        i,cite,em,var,address,dfn{font-style:normal;}
+        [hidefocus],summary{outline:0;}
+        li{list-style:none;}
+        h1,h2,h3,h4,h5,h6,small{font-size:100%;}
+        sup,sub{font-size:83%;}
+        pre,code,kbd,samp{font-family:inherit;}
+        q:before,q:after{content:none;}
+        textarea{overflow:auto;resize:none;}
+        label,summary{cursor:default;}
+        a,button{cursor:pointer;}
+        h1,h2,h3,h4,h5,h6,em,strong,b{font-weight:normal;}
+        del,ins,u,s,a,a:hover{text-decoration:none;}
+        body,textarea,input,button,select,keygen,legend{font:12px/1.14 arial,simsun;color:#333;outline:0;}
+        body{background:#fff;}
+        a,a:hover{color:#333;}
     </style>
 
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="http://static.runoob.com/assets/jquery/jquery.growl/javascripts/jquery.growl.js" type="text/javascript"></script>
     <link href="http://static.runoob.com/assets/jquery/jquery.growl/stylesheets/jquery.growl.css" rel="stylesheet" type="text/css" />
+    <style>
+        body{
+            background-color: #485F6E;
+        }
+        .answerTitle{
+            padding:20px 0 0 80px;
+            font-size: x-large;
+        }
+        .answerList{
+            width: 80%;
+            height: 100%;
+            margin: 0 auto;
+            background-color: #4a6271;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        .answer{
+            width: 80%;
+            margin: 10px auto 10px;
+            padding: 20px;
+            background-color: #cccccc;
+            border-radius: 5px;
+            box-shadow: #333333 2px 3px 3px 1px;
+        }
+    </style>
     <script>
         $(document).ready(function() {
             if (!window.WebSocket) {
@@ -32,7 +77,7 @@
                 });
             }
             ws.onmessage = function(evt) {
-                $('#messages').append('<li>' + evt.data + '</li>');
+                $('#answerList').append('<div class="answer">' + evt.data + '</div>');
             }
             ws.onclose = function(evt) {
                   event.preventDefault();
@@ -46,7 +91,48 @@
     </script>
 </head>
 <body>
-    <h2>答题辅助系统</h2>
-    <div id="messages"></div>
+    <h2 class="answerTitle">答题辅助系统</h2>
+    <div class="answerList">
+        <div class="answer">
+            <div class="question">Question one : what you want to know?</div>
+            <div class="result">
+                <li>A: 10 <span clss="count">5</span></li>
+                <li>B: 20 <span clss="count">0</span></li>
+                <li>C: 30 <span clss="count">0</span></li>
+            </div>
+        </div>
+        <div class="answer">
+            <div class="question">Question one : what you want to know?</div>
+            <div class="result">
+                <li>A: 10 <span clss="count">5</span></li>
+                <li>B: 20 <span clss="count">0</span></li>
+                <li>C: 30 <span clss="count">0</span></li>
+            </div>
+        </div>
+        <div class="answer">
+            <div class="question">Question one : what you want to know?</div>
+            <div class="result">
+                <li>A: 10 <span clss="count">5</span></li>
+                <li>B: 20 <span clss="count">0</span></li>
+                <li>C: 30 <span clss="count">0</span></li>
+            </div>
+        </div>
+        <div class="answer">
+            <div class="question">Question one : what you want to know?</div>
+            <div class="result">
+                <li>A: 10 <span clss="count">5</span></li>
+                <li>B: 20 <span clss="count">0</span></li>
+                <li>C: 30 <span clss="count">0</span></li>
+            </div>
+        </div>
+        <div class="answer">
+            <div class="question">Question one : what you want to know?</div>
+            <div class="result">
+                <li>A: 10 <span clss="count">5</span></li>
+                <li>B: 20 <span clss="count">0</span></li>
+                <li>C: 30 <span clss="count">0</span></li>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

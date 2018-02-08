@@ -11,7 +11,7 @@ redis_server:
   image: redis
   container_name: wzdt_redis
   volumes:
-    - .:/kerwin
+    - ./docker:/kerwin
   expose:
    - "6379"
   ports:
@@ -26,6 +26,7 @@ python_server:
     - mongo_server
   volumes:
     - .:/kerwin
+    - ./docker/mitmproxy:/root/.mitmproxy
   ports:
    - "8080:8080"
    - "5000:5000"

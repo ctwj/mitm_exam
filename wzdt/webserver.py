@@ -13,7 +13,7 @@ import tornadoredis
 
 class IndexPageHandler(tornado.web.RequestHandler):
     def get(self):
-        self.render('templates/index.html')
+        self.render('/kerwin/templates/index.html')
 class QuestionListhandler(tornado.web.RequestHandler):
     def get(self):
         self.write('{"code": "SUCCESS", "data": {"answerFalse": 0, "answerRight": 0, "countdown": 10, "integral": 0, "isover": 0, "options": [{"id": "A", "name": "65"}, {"id": "B", "name": "66"}, {"id": "C", "name": "68"} ], "title": "柯南道尔写了多少部侦探小说", "totalQuestion": 8, "uaId": "1691961"}, "msg": "成功"}')

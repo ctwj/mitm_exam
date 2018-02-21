@@ -10,10 +10,15 @@
 系统启动
 ```
 docker-compose up
+#第一次启动后导入题目
+docker cp ./docker/quizzes.json wzdt_mongo:/root/quizzes.json
+docker exec -it wzdt_mongo mongoimport -d wzdt -c questions --file /root/quizzes.json --jsonArray --drop
+docker exec -it wzdt_mongo rm /root/quizzes.json
 ```
 1. 系统启动后,手机连上wifi设置代理为8080
-2. 访问http://mitm.it,并安装证书
+2. 访问http://mitm.it,并安装证书(第一次使用需要安装)
 3. 访问http://localhost:5000
+
 
 
 

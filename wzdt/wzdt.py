@@ -5,7 +5,9 @@ from urllib.parse import quote
 import string
 import requests
 from RedisHelper import RedisHelper
+from MongoModel import  DataController
 obj = RedisHelper()
+db = DataController()
 
 def writeIndex():
     pass
@@ -19,20 +21,64 @@ def writeQuestion():
 def writeAnswer():
     pass
 
+def request(flow):
+    pass
+    # print ('request:')
+    # print(flow.request.content)
+    # print(type(flow.request.content))
+    # flow.request.content = flow.request.content.replace('type=1','type=2')
+    # print(flow.request.content)
+
+def websocket_message(flow):
+    ctx.log.info(flow)
+
 def response(flow):
     path = flow.request.path
-    if path == '/question/list':
-        ctx.log.info(flow.request.text)
+    # if 'findQuiz' in path:
+    #         #匹配上后证明抓到的是问题了, 查答案
+    #         data = flow.response.content
+    #         quiz = json.loads(data)
+    #         #获取问题，当前数据是模拟的，有可能和实际处理不一致
+    #         question = quiz['quiz']
+    #         print(question)
+
+    #         #获取答案
+    #         answer = self.answer_set.find_one({"quiz":question})
+    #         if answer is None:
+    #             print('no answer')
+    #         else:
+    #             answerIndex = int(answer['answer'])-1
+    #             options = answer['options']
+    #             print(options[answerIndex])
+    
+    if 'findQuiz' in path:
+        ctx.log.info(path)
         try:
+            print('start~~~~~~~~~~~~~~~~~~~~~~~~~~~start')
+            print(flow.response.text)
+            # decode response
             data = json.loads(flow.response.text)
-            question = data['data']['title']
+            
+            # get question and options
+            question = data['data']['quiz']
             options = data['data']['options']
             ctx.log.info('question : %s, options : %s'%(question, options))
-            options = ask(question, options)
-            data['data']['options'] = options
-            flow.response.text = json.dumps(data)
-            obj.push(json.dumps(data))
-            print('~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+
+            data['data']['question'] = question
+            # find answer from mongo
+            answer = db.find_answer(question)
+            if answer != False:
+                data['data']['answer'] = answer
+            else:
+                # search result and put it in data
+                result = ask(question, options)
+                data['data']['result'] = result
+                
+
+            # push result to redis
+            obj.public(json.dumps(data))
+            ctx.log.info(json.dumps(data))
+            print('over~~~~~~~~~~~~~~~~~~~~~~~~~~~over')
 
         except Exception as e:
             print(e)
@@ -46,8 +92,10 @@ def ask(question, options):
     content = requests.get(url, headers=headers).text
     answer = []
     for option in options:
-        key = option['name']
+        # key = option['name']
+        key = option
         count = content.count(key)
+        # count = 5
         ctx.log.info('option : %s, count : %s'%(option, count))
-        answer.append(key + ' [' + str(count) + ']')
+        answer.append({'name':option,'count':count})
     return answer

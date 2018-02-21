@@ -25,10 +25,10 @@
         body{background:#fff;}
         a,a:hover{color:#333;}
     </style>
-
-    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="http://static.runoob.com/assets/jquery/jquery.growl/javascripts/jquery.growl.js" type="text/javascript"></script>
-    <link href="http://static.runoob.com/assets/jquery/jquery.growl/stylesheets/jquery.growl.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="{{ static_url("animate.css")}}">
+    <script src="{{ static_url("jquery.min.js") }}"></script>
+    <script src="{{ static_url("jquery.growl.js") }}" type="text/javascript"></script>
+    <link href="{{ static_url("jquery.growl.css") }}" rel="stylesheet" type="text/css" />
     <style>
         body{
             background-color: #485F6E;
@@ -49,12 +49,93 @@
         .answer{
             width: 80%;
             margin: 10px auto 10px;
-            padding: 20px;
+            padding: 10px;
             background-color: #cccccc;
             border-radius: 5px;
             box-shadow: #333333 2px 3px 3px 1px;
         }
+        .answerList .answer:nth-child(1) {
+            background-color: #87d6dc;
+        }
+        .question {
+            font-weight: bold;
+            font-size: 24px;
+            padding: 0 0 5px 0;
+            color: #485f6e;
+        }
+        .result {
+            padding: 2px 0 2px 5px;
+            line-height: 20px;
+            background-color: inherit;
+        }
+        .result li {
+            margin-bottom: 4px;
+            font-size: 18px;
+        }
+        .count {
+            display: inline-block;
+            height: 15px;
+            width: 15px;
+            font-size: 12px;
+            font-weight: bold;
+            background-color: yellow;
+            border-radius: 50%;
+            color:black;
+            text-align: center;
+        }
+        .zero {
+            background-color: #f9627e;
+        }
+        .nozero{
+            background-color: #62a5f9;
+        }
+        .right{
+            background-color: #62a5f9;
+            font-size: 24px;
+            font-weight: block;
+        }
+        .index{
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        div{
+          /*设置动画属性*/
+          animation-duration: 0.5s;
+          animation-delay: 0s;
+        }
+
     </style>
+</head>
+<body>
+    <h2 class="answerTitle">答题辅助系统</h2>
+    <div class="answerList">
+        <!-- <div class="answer">
+            <div class="question">Question one : what you want to know?</div>
+            <div class="result">
+                <li><span class="count">5</span>A: 10 </li>
+                <li><span class="count">0</span>B: 20 </li>
+                <li><span class="count">0</span>C: 30 </li>
+            </div>
+        </div>
+        <div class="answer">
+            <div class="question">Question one : what you want to know?</div>
+            <div class="result">
+                <li><span class="count">5</span>A: 10 </li>
+                <li><span class="count">0</span>B: 20 </li>
+                <li><span class="count">0</span>C: 30 </li>
+            </div>
+        </div>
+        <div class="answer">
+            <div class="question">Question one : what you want to know?</div>
+            <div class="result">
+                <li><span class="count">5</span>A: 10 </li>
+                <li><span class="count">0</span>B: 20 </li>
+                <li><span class="count">0</span>C: 30 </li>
+            </div>
+            <button onclick="addtest()">A</button>
+        </div> -->
+    </div>
     <script>
         $(document).ready(function() {
             if (!window.WebSocket) {
@@ -77,7 +158,41 @@
                 });
             }
             ws.onmessage = function(evt) {
-                $('#answerList').append('<div class="answer">' + evt.data + '</div>');
+                var data,question,answerlist=[],list=[],zclass;
+                try{
+                    data = $.parseJSON(evt.data);
+                    data = data.data;
+                    question = data.question;
+                    has_answer = false;
+                    answer_str = '';
+                    if ( data.hasOwnProperty('answer') ) {
+                        //答案确定
+                        answerlist =  data.options;
+                        has_answer = true;
+                        answer_str = '<span class="answer">'+ data.answer + '<span>';
+                    } else {
+                        answerlist =  data.result;
+                    }
+                } catch(err) {
+                    console.log(err);
+                    return $.growl({title: "提示",message: evt.data});
+                }
+
+                for ( index in answerlist ) {
+                    if ( has_answer == true ) {
+                        zclass =  data.answer == answerlist[index]?'right':'';
+                        answer = '<li class="'+zclass+'"><span class="index">'+index + ".</span>"+answerlist[index]+'</li>';
+                    } else {
+                        zclass = (answerlist[index]['count'] == 0) ? 'zero' : 'nozero';
+                        answer = '<li class="'+zclass+'"><span class="count">'+answerlist[index]['count']+'</span><span class="index">'+index + ".</span>"+answerlist[index]['name']+'</li>';
+                    }
+                    
+                    list.push(answer);
+                }
+                
+                $item = $('<div id="test" class="animated slideInLeft answer"><div class="question">'+question+'</div><div class="result">' + list.join('') + '</div></div>')
+                $('.answerList').prepend($item);
+
             }
             ws.onclose = function(evt) {
                   event.preventDefault();
@@ -88,51 +203,10 @@
                   });
             }
         });
+        function addtest(){
+                $item = $('<div id="test" class="animated slideInLeft answer"><div class="question">test</div><div class="result">777777</div></div>')
+                $('.answerList').prepend($item);
+            }
     </script>
-</head>
-<body>
-    <h2 class="answerTitle">答题辅助系统</h2>
-    <div class="answerList">
-        <div class="answer">
-            <div class="question">Question one : what you want to know?</div>
-            <div class="result">
-                <li>A: 10 <span clss="count">5</span></li>
-                <li>B: 20 <span clss="count">0</span></li>
-                <li>C: 30 <span clss="count">0</span></li>
-            </div>
-        </div>
-        <div class="answer">
-            <div class="question">Question one : what you want to know?</div>
-            <div class="result">
-                <li>A: 10 <span clss="count">5</span></li>
-                <li>B: 20 <span clss="count">0</span></li>
-                <li>C: 30 <span clss="count">0</span></li>
-            </div>
-        </div>
-        <div class="answer">
-            <div class="question">Question one : what you want to know?</div>
-            <div class="result">
-                <li>A: 10 <span clss="count">5</span></li>
-                <li>B: 20 <span clss="count">0</span></li>
-                <li>C: 30 <span clss="count">0</span></li>
-            </div>
-        </div>
-        <div class="answer">
-            <div class="question">Question one : what you want to know?</div>
-            <div class="result">
-                <li>A: 10 <span clss="count">5</span></li>
-                <li>B: 20 <span clss="count">0</span></li>
-                <li>C: 30 <span clss="count">0</span></li>
-            </div>
-        </div>
-        <div class="answer">
-            <div class="question">Question one : what you want to know?</div>
-            <div class="result">
-                <li>A: 10 <span clss="count">5</span></li>
-                <li>B: 20 <span clss="count">0</span></li>
-                <li>C: 30 <span clss="count">0</span></li>
-            </div>
-        </div>
-    </div>
 </body>
 </html>

@@ -89,10 +89,30 @@
         .nozero{
             background-color: #62a5f9;
         }
-        .right{
+        .rightanswer{
             background-color: #62a5f9;
             font-size: 24px;
             font-weight: block;
+        }
+        .rightspan{ 
+            display: inline-block; 
+            width: 10px;
+            height:5px; 
+            background: red;
+            line-height: 0;
+            font-size:0;
+            vertical-align: middle;
+            -webkit-transform: rotate(45deg);
+            margin-right: 15px;
+        }
+        .rightspan:after{
+            content:'/';
+            display:block;
+            width: 20px;
+            height:5px; 
+            background: red;
+            -webkit-transform: rotate(-90deg) translateY(-50%) translateX(50%);
+            margin-right: 15px;
         }
         .index{
             font-size: 18px;
@@ -180,8 +200,9 @@
 
                 for ( index in answerlist ) {
                     if ( has_answer == true ) {
-                        zclass =  data.answer == answerlist[index]?'right':'';
-                        answer = '<li class="'+zclass+'"><span class="index">'+index + ".</span>"+answerlist[index]+'</li>';
+                        zclass =  data.answer == answerlist[index]?'rightanswer':'';
+                        rightspan =  data.answer == answerlist[index]?'<span class="rightspan"></span>':'';
+                        answer = '<li class="'+zclass+'">'+rightspan+'<span class="index">'+index + ".</span>"+answerlist[index]+'</li>';
                     } else {
                         zclass = (answerlist[index]['count'] == 0) ? 'zero' : 'nozero';
                         answer = '<li class="'+zclass+'"><span class="count">'+answerlist[index]['count']+'</span><span class="index">'+index + ".</span>"+answerlist[index]['name']+'</li>';

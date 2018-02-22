@@ -13,7 +13,7 @@ class DataController:
 
 
     def add_question(self, data):
-        if not self.is_exists_question(data.quiz)
+        if not self.is_exists_question(data.quiz):
             self.answer_set.insert(data)
 
 

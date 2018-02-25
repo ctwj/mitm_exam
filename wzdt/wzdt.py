@@ -34,22 +34,6 @@ def websocket_message(flow):
 
 def response(flow):
     path = flow.request.path
-    # if 'findQuiz' in path:
-    #         #匹配上后证明抓到的是问题了, 查答案
-    #         data = flow.response.content
-    #         quiz = json.loads(data)
-    #         #获取问题，当前数据是模拟的，有可能和实际处理不一致
-    #         question = quiz['quiz']
-    #         print(question)
-
-    #         #获取答案
-    #         answer = self.answer_set.find_one({"quiz":question})
-    #         if answer is None:
-    #             print('no answer')
-    #         else:
-    #             answerIndex = int(answer['answer'])-1
-    #             options = answer['options']
-    #             print(options[answerIndex])
     
     if 'findQuiz' in path:
         ctx.log.info(path)
